@@ -1,5 +1,6 @@
 package com.mercadolibre.itacademy;
 
+import org.jooby.Request;
 import org.jooby.mvc.GET;
 import org.jooby.mvc.POST;
 import org.jooby.mvc.Path;
@@ -8,17 +9,27 @@ import java.util.Optional;
 
 public class UserController {
 
-    @Path("/mvc")
+    public String doLogin(Request req) throws Exception {
+        User user = req.body(User.class);
+        System.out.println(user);
+        return "ok";
+          /*String body = req.body().value();
+          UserService userService = new UserService();
+          String userLogin = userService.sendPost("https://localhost:8081/login");
 
-    public class User {
+            //UserService userService = new UserService();
+            //String userLogin = userService.sendPost("https://localhost:8081/login");
+            */
+    }
 
-        @Path("/login")
-        @POST
-        public String login(String name,String password) throws Exception {
+    public String getSites(Request req) {
+        String id = req.param("token").value();
+        return "ok";
+    }
 
-            UserService userService = new UserService();
-            String userLogin = userService.sendPost("https://localhost:8081/login");
-            return userLogin;
-        }
+    public String getSitesCategories(Request req) {
+        String idCategory = req.param("id").value();
+        String token = req.param("token").value();
+        return "ok";
     }
 }

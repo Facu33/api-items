@@ -8,16 +8,21 @@ import org.jooby.json.Jackson;
  */
 public class App extends Jooby {
 
-  {
-    use(new Jackson());
-    use(UserController.class);
-    get("/", () -> "Hello World!");
-  }
+    {
+        use(new Jackson());
+        UserController userController = new UserController();
 
-  public static void main(final String[] args) throws Exception {
+        post("/login", req -> userController.doLogin(req));
 
-    run(App::new, args);
+        get("/sites/:token", req -> userController.getSites(req));
 
-  }
+        get("/sites/:id/categories/:token", req -> userController.getSitesCategories(req));
+
+    }
+
+
+    public static void main(final String[] args) throws Exception {
+        run(App::new, args);
+    }
 
 }

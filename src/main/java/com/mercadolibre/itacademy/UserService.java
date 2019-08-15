@@ -12,63 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 public class UserService {
 
-    /*public String doLogin (User user) {
-        try {
-            Gson gson = new Gson();
-            BufferedReader in = createUrl("https://localhost:8081/lopgin");
-            gson.fromJson(in,User.class);
-            Site[] sites = gson.fromJson(in,Site[].class);
-            for(int i = 0; i<sites.length; i++){
-                System.out.println(sites[i].toString());
-            }
-            BufferedReader inC = createUrl("https://api.mercadolibre.com/sites/"+id+"/categories");
-            Categorie[] categories = gson.fromJson(inC,Categorie[].class);
-            for(int i = 0; i<categories.length; i++){
-                System.out.println(categories[i].toString());
-            }
-
-        } catch (MalformedURLException excetion) {
-            System.out.println(excetion.getMessage());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private static BufferedReader createUrl(String strUrl) throws MalformedURLException, IOException {
-
-        URL url = new URL(strUrl);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setRequestMethod("POST");
-        urlConnection.setRequestProperty("Accept", "application/json");
-        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
-        if (urlConnection instanceof HttpURLConnection) {
-            HttpURLConnection connection = (HttpURLConnection) urlConnection;
-
-            OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
-            writer.write(data);
-            writer.flush();
-            String line;
-            BufferedReader reader = new BufferedReader(new
-                    InputStreamReader(conn.getInputStream()));
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-            writer.close();
-            reader.close();
-
-
-
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            return in;
-        } else {
-            System.out.println("URL invalida");
-            return null;
-        }
-    }
-    */
-
-    public String sendPost(String url) throws Exception {
+    public String sendLogin(String url,User user) throws Exception {
 
         URL urlConnection = new URL(url);
         HttpsURLConnection connection = (HttpsURLConnection) urlConnection.openConnection();
@@ -97,6 +41,23 @@ public class UserService {
             return response.toString();
         }
 
+    }
+
+    public String sendGetSites(String strUrl,String username,String token) throws Exception {
+
+        URL url = new URL(strUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("Accept", "application/json");
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
+        if (urlConnection instanceof HttpURLConnection) {
+            HttpURLConnection connection = (HttpURLConnection) urlConnection;
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            return "in";
+        } else {
+            System.out.println("URL invalida");
+            return null;
+        }
+        //return "ok";
     }
 
 }
