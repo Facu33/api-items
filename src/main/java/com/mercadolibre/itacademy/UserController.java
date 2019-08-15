@@ -1,6 +1,7 @@
 package com.mercadolibre.itacademy;
 
 import org.jooby.Request;
+import org.jooby.Response;
 import org.jooby.mvc.GET;
 import org.jooby.mvc.POST;
 import org.jooby.mvc.Path;
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public class UserController {
 
-    public String doLogin(Request req) throws Exception {
+    public String doLogin(Request req, Response res) throws Exception {
         User user = req.body(User.class);
         System.out.println(user);
         return "ok";
@@ -22,12 +23,12 @@ public class UserController {
             */
     }
 
-    public String getSites(Request req) {
+    public String getSites(Request req, Response res) {
         String id = req.param("token").value();
         return "ok";
     }
 
-    public String getSitesCategories(Request req) {
+    public String getSitesCategories(Request req, Response res) {
         String idCategory = req.param("id").value();
         String token = req.param("token").value();
         return "ok";
