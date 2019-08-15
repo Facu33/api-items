@@ -1,26 +1,21 @@
 package com.mercadolibre.itacademy;
 
+import com.google.gson.Gson;
 import org.jooby.Request;
 import org.jooby.Response;
-import org.jooby.mvc.GET;
-import org.jooby.mvc.POST;
-import org.jooby.mvc.Path;
-
-import java.util.Optional;
 
 public class UserController {
 
-    public String doLogin(Request req, Response res) throws Exception {
-        User user = req.body(User.class);
-        System.out.println(user);
-        return "ok";
-          /*String body = req.body().value();
-          UserService userService = new UserService();
-          String userLogin = userService.sendPost("https://localhost:8081/login");
+    public void doLogin(Request req, Response res) throws Exception {
+        try {
+            User user = req.body(User.class);
+            System.out.println(user.username);
+            UserService userService = new UserService();
+            String response = userService.post("http://localhost:8083/login", user);
+            res.status(200).send(response);
+        } catch (Throwable throwable) {
 
-            //UserService userService = new UserService();
-            //String userLogin = userService.sendPost("https://localhost:8081/login");
-            */
+        }
     }
 
     public String getSites(Request req, Response res) {

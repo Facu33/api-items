@@ -1,6 +1,7 @@
 package com.mercadolibre.itacademy;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -12,54 +13,53 @@ import java.nio.charset.StandardCharsets;
 
 public class UserService {
 
-    public String sendLogin(String url,User user) throws Exception {
+    public String get(String url, User user) throws Exception {
+        return "";
+    }
 
-        URL urlConnection = new URL(url);
-        HttpsURLConnection connection = (HttpsURLConnection) urlConnection.openConnection();
 
-        //add reuqest header
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json; utf-8");
-        connection.setRequestProperty("Accept", "application/json");
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+    public static String post(String urlGet, User user) {
+        try {
+            URL url = new URL(urlGet);
 
-        String jsonInputString = "{name:facu,password:1234}";
+            try {
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setDoInput(true);
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Accept", "application/json");
+                con.setRequestMethod("POST");
 
-        // Send post request
-        connection.setDoOutput(true);
-        try(OutputStream os = connection.getOutputStream()) {
-            byte[] input = jsonInputString.getBytes("utf-8");
-            os.write(input, 0, input.length);
-        }
-        try(BufferedReader br = new BufferedReader(
-                new InputStreamReader(connection.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
+                Gson gson = new Gson();
+                JsonElement jsonInputString = gson.toJsonTree(user);
+
+                OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+                wr.write(jsonInputString.toString());
+                wr.flush();
+
+                StringBuilder sb = new StringBuilder();
+                int HttpResult = con.getResponseCode();
+                if (HttpResult == HttpURLConnection.HTTP_OK) {
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(con.getInputStream(), "utf-8"));
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+                    return sb.toString();
+                } else {
+                    System.out.println(con.getResponseMessage());
+                }
+            } catch (IOException exception) {
+                System.out.println(exception.getMessage());
             }
-            return response.toString();
+
+        } catch (MalformedURLException exception) {
+            System.out.println(exception.getMessage());
         }
-
+        return (null);
     }
-
-    public String sendGetSites(String strUrl,String username,String token) throws Exception {
-
-        URL url = new URL(strUrl);
-        URLConnection urlConnection = url.openConnection();
-        urlConnection.setRequestProperty("Accept", "application/json");
-        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
-        if (urlConnection instanceof HttpURLConnection) {
-            HttpURLConnection connection = (HttpURLConnection) urlConnection;
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            return "in";
-        } else {
-            System.out.println("URL invalida");
-            return null;
-        }
-        //return "ok";
-    }
-
 }
 
 
