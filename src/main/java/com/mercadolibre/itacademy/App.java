@@ -18,6 +18,12 @@ public class App extends Jooby {
 
         get("/sites/:id/categories/:token", (req,res) -> userController.getSitesCategories(req,res));
 
+        post("/item", (req, res) -> userController.postItem(req,res));
+
+        get("/item", (req,res) -> userController.getItems(req,res));
+
+        get("/item/:username", (req,res)-> userController.getItemsxUser(req,res));
+
     }
 
 
