@@ -20,7 +20,7 @@ import java.util.*;
 
 public class UserService {
 
-    public String get(String strUrl,String username,String token) throws IOException {
+    public static String getSites(String strUrl,String username,String token) throws Exception {
 
         StringBuilder stringBuilder = new StringBuilder(strUrl);
         stringBuilder.append("?username=");
@@ -106,7 +106,6 @@ public class UserService {
 
     public static Item postItems(Item item){
 
-
         RestHighLevelClient client = makeConnection();
 
         Map<String, String> dataMap = new HashMap<>();
@@ -118,7 +117,7 @@ public class UserService {
         IndexRequest indexRequest = new IndexRequest("items").source(dataMap);
 
         try {
-            IndexResponse response = client.index(indexRequest,RequestOptions.DEFAULT);
+            client.index(indexRequest,RequestOptions.DEFAULT);
             return item;
         } catch(ElasticsearchException e) {
             e.getDetailedMessage();
@@ -132,6 +131,7 @@ public class UserService {
         }
         return null;
     }
+
 
     public static Collection<Item> getItems() {
 
@@ -205,15 +205,6 @@ public class UserService {
         }
         return null;
     }
-
-
-
-
-
-
-
-
-
 
 
     private static RestHighLevelClient makeConnection() {
