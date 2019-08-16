@@ -22,6 +22,8 @@ public class UserService {
 
     public static String getSites(String strUrl,String username,String token) throws Exception {
 
+        System.out.println("Llego");
+
         StringBuilder stringBuilder = new StringBuilder(strUrl);
         stringBuilder.append("?username=");
         stringBuilder.append(URLEncoder.encode(username, "UTF-8"));
