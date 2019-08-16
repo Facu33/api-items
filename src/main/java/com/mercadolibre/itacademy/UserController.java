@@ -15,7 +15,7 @@ public class UserController {
     public void doLogin(Request req, Response res) throws Exception {
         try {
             User user = req.body(User.class);
-            String response = UserService.postLogin("http://localhost:8084/login", user);
+            String response = UserService.postLogin("http://localhost:8084/users/login", user);
             User userJson = gson.fromJson(response, User.class);
             res.status(200).send(userJson);
         } catch (Throwable throwable) {
@@ -27,42 +27,34 @@ public class UserController {
         try {
             String username = req.param("username").value();
             String token = req.param("token").value();
-            String response = UserService.getSites("http://localhost:8084/sites", username, token);
+            String response = UserService.getSites("http://localhost:8084/users/sites", username, token);
+            if (response == "404") {
+                res.status(404).send("Bad Request");
+            }
             Site[] sitesJson = gson.fromJson(response, Site[].class);
             res.status(200).send(sitesJson);
         } catch (SocketException se) {
-
             System.out.println(se.toString());
-
             try {
-
-                com.mercadolibre.itacademy.Response response = new com.mercadolibre.itacademy.Response("Server is down","Service unavailable");
-
+                String response = "Server is down service unavailable";
                 res.status(503).send(response);
-
-            } catch (Throwable throwable){
-
-                System.out.print(throwable.toString());
-
-            }
-
-        } catch (IOException ie){
-
-            try {
-
-                com.mercadolibre.itacademy.Response response = new com.mercadolibre.itacademy.Response("Could not confirm User","Incorrect parameters");
-                res.status(400).send(response);
-
             } catch (Throwable throwable) {
-
                 System.out.print(throwable.toString());
-
             }
 
-        } catch (Throwable throwable){
-
-            System.out.print(throwable.toString());
-
+        } catch (IOException ie) {
+            try {
+                String response = "Could not confirm user incorrect parameters";
+                res.status(400).send(response);
+            } catch (Throwable throwable) {
+                System.out.print(throwable.toString());
+            }
+        } catch (Throwable throwable) {
+            try {
+                res.status(401).send("Bad Credentials");
+            } catch (Throwable e) {
+                System.out.print(e.toString());
+            }
         }
     }
 
@@ -72,10 +64,44 @@ public class UserController {
             String username = req.param("username").value();
             String id = req.param("id").value();
             String token = req.param("token").value();
-            String response = userService.getSites("http://localhost:8084/sites/" + id + "/categories", username, token);
+            String response = userService.getSites("http://localhost:8084/users/sites/" + id + "/categories", username, token);
+            if (response == "404") {
+                res.status(404).send("Bad Request");
+            }
             Site[] sitesJson = gson.fromJson(response, Site[].class);
             res.status(200).send(sitesJson);
+        } catch (SocketException se) {
+
+            System.out.println(se.toString());
+
+            try {
+                res.status(401).send("Bad Credentials");
+            } catch (Throwable throwable) {
+
+                System.out.print(throwable.toString());
+
+            }
+
+        } catch (IOException ie) {
+
+            System.out.println(ie.toString());
+
         } catch (Throwable throwable) {
+
+            System.out.print(throwable.toString());
+
+            try {
+
+                res.status(400).send("{" +
+                        "\"message\": \"Malformed body\"" +
+                        "}");
+
+            } catch (Throwable throwable1) {
+
+                System.out.print(throwable1.toString());
+
+            }
+
         }
     }
 
@@ -97,17 +123,17 @@ public class UserController {
                         "\"message\": \"Server is Down\"" +
                         "}");
 
-            } catch (Throwable throwable){
+            } catch (Throwable throwable) {
 
                 System.out.print(throwable.toString());
 
             }
 
-        } catch (IOException ie){
+        } catch (IOException ie) {
 
             System.out.println(ie.toString());
 
-        } catch (Throwable throwable){
+        } catch (Throwable throwable) {
 
             System.out.print(throwable.toString());
 
@@ -117,7 +143,7 @@ public class UserController {
                         "\"message\": \"Malformed body\"" +
                         "}");
 
-            } catch (Throwable throwable1){
+            } catch (Throwable throwable1) {
 
                 System.out.print(throwable1.toString());
 

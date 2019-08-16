@@ -38,17 +38,23 @@ public class UserService {
             if (con instanceof HttpURLConnection) {
                 HttpURLConnection connection = (HttpURLConnection) con;
                 System.out.println("\nSending request to URL : " + url);
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream()));
-                String line;
-                StringBuffer response = new StringBuffer();
+                int HttpResult = connection.getResponseCode();
+                if (HttpResult == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(
+                            new InputStreamReader(connection.getInputStream()));
+                    String line;
+                    StringBuffer response = new StringBuffer();
 
-                while ((line = in.readLine()) != null) {
-                    response.append(line);
+                    while ((line = in.readLine()) != null) {
+                        response.append(line);
+                    }
+                    in.close();
+
+                    return response.toString();
                 }
-                in.close();
-
-                return response.toString();
+                if (HttpResult == HttpURLConnection.HTTP_NOT_FOUND) {
+                    return "404";
+                }
             }
 
             return "";
