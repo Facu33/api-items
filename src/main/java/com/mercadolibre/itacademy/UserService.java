@@ -8,34 +8,55 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.update.UpdateRequest;
-import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.*;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
+import java.net.*;
 import java.util.*;
 
 public class UserService {
 
-    public String get(String url, User user) throws Exception {
-        return "";
+    public String get(String strUrl,String username,String token) throws Exception {
+
+        StringBuilder stringBuilder = new StringBuilder(strUrl);
+        stringBuilder.append("?username=");
+        stringBuilder.append(URLEncoder.encode(username, "UTF-8"));
+        stringBuilder.append("&token=");
+        stringBuilder.append(URLEncoder.encode(token, "UTF-8"));
+
+        URL url = new URL(stringBuilder.toString());
+
+        URLConnection con = url.openConnection();
+        con.setRequestProperty("Accept", "application/json");
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        if (con instanceof HttpURLConnection) {
+            HttpURLConnection connection = (HttpURLConnection) con;
+            System.out.println("\nSending request to URL : " + url);
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+            String line;
+            StringBuffer response = new StringBuffer();
+
+            while ((line = in.readLine()) != null) {
+                response.append(line);
+            }
+            in.close();
+
+            return response.toString();
+        } else {
+            System.out.println("URL invalida");
+            return null;
+        }
     }
 
 
-    public static String post(String urlGet, User user) {
+    public static String postLogin(String urlGet, User user) {
         try {
             URL url = new URL(urlGet);
-
             try {
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setDoOutput(true);

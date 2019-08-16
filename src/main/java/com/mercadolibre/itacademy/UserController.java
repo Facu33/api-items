@@ -1,10 +1,8 @@
 package com.mercadolibre.itacademy;
 
 import com.google.gson.Gson;
-import org.jooby.Mutant;
 import org.jooby.Request;
 import org.jooby.Response;
-
 import java.util.Collection;
 
 public class UserController {
@@ -12,23 +10,31 @@ public class UserController {
     public void doLogin(Request req, Response res) throws Exception {
         try {
             User user = req.body(User.class);
-            System.out.println(user.username);
+            Gson gson = new Gson();
             UserService userService = new UserService();
-            String response = userService.post("http://localhost:8083/login", user);
-            res.status(200).send(response);
+            String response = userService.postLogin("http://localhost:8084/login", user);
+            User userJson = gson.fromJson(response,User.class);
+            res.status(200).send(userJson);
         } catch (Throwable throwable) {
 
         }
     }
 
-    public String getSites(Request req, Response res) {
-        String id = req.param("token").value();
-        return "ok";
+    public void getSites(Request req, Response res) {
+        try {
+            UserService userService = new UserService();
+            Gson gson = new Gson();
+            String username = req.param("username").value();
+            String token = req.param("token").value();
+            String response = userService.get("http://localhost:8084/sites",username,token);
+            Site[] sitesJson = gson.fromJson(response,Site[].class);
+            res.status(200).send(sitesJson);
+        } catch (Throwable throwable) {
+        }
     }
 
     public String getSitesCategories(Request req, Response res) {
-        String idCategory = req.param("id").value();
-        String token = req.param("token").value();
+        System.out.println(req.param("username").value());
         return "ok";
     }
 

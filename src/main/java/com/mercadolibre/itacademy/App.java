@@ -14,7 +14,7 @@ public class App extends Jooby {
 
         post("/login", (req,res) -> userController.doLogin(req,res));
 
-        get("/sites/:token", (req,res) -> userController.getSites(req,res));
+        get("/sites", (req,res) -> userController.getSites(req,res));
 
         get("/sites/:id/categories/:token", (req,res) -> userController.getSitesCategories(req,res));
 

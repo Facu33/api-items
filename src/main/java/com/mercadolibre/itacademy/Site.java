@@ -1,5 +1,4 @@
 package com.mercadolibre.itacademy;
-
 public class Site {
 
     private String id;
