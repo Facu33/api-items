@@ -1,9 +1,16 @@
 package com.mercadolibre.itacademy;
-public class Site {
 
+public class Categorie {
     private String id;
     private String name;
 
+    public Categorie() {
+    }
+
+    public Categorie(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public String getId() {
         return id;
@@ -20,9 +27,4 @@ public class Site {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String toString(){
-        return "[" + id + "-" + name + "]";
-    }
-
 }
