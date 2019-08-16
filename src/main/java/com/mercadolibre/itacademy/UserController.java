@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import org.jooby.Request;
 import org.jooby.Response;
 
+import java.io.IOException;
+import java.net.SocketException;
 import java.util.Collection;
 
 public class UserController {
@@ -28,7 +30,39 @@ public class UserController {
             String response = UserService.getSites("http://localhost:8084/sites", username, token);
             Site[] sitesJson = gson.fromJson(response, Site[].class);
             res.status(200).send(sitesJson);
-        } catch (Throwable throwable) {
+        } catch (SocketException se) {
+
+            System.out.println(se.toString());
+
+            try {
+
+                com.mercadolibre.itacademy.Response response = new com.mercadolibre.itacademy.Response("Server is down","Service unavailable");
+
+                res.status(503).send(response);
+
+            } catch (Throwable throwable){
+
+                System.out.print(throwable.toString());
+
+            }
+
+        } catch (IOException ie){
+
+            try {
+
+                com.mercadolibre.itacademy.Response response = new com.mercadolibre.itacademy.Response("Could not confirm User","Incorrect parameters");
+                res.status(400).send(response);
+
+            } catch (Throwable throwable) {
+
+                System.out.print(throwable.toString());
+
+            }
+
+        } catch (Throwable throwable){
+
+            System.out.print(throwable.toString());
+
         }
     }
 
@@ -53,8 +87,42 @@ public class UserController {
             res.header("Content-Type", "application/json");
             res.status(200).send(response);
 
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
+        } catch (SocketException se) {
+
+            System.out.println(se.toString());
+
+            try {
+
+                res.status(503).send("{" +
+                        "\"message\": \"Server is Down\"" +
+                        "}");
+
+            } catch (Throwable throwable){
+
+                System.out.print(throwable.toString());
+
+            }
+
+        } catch (IOException ie){
+
+            System.out.println(ie.toString());
+
+        } catch (Throwable throwable){
+
+            System.out.print(throwable.toString());
+
+            try {
+
+                res.status(400).send("{" +
+                        "\"message\": \"Malformed body\"" +
+                        "}");
+
+            } catch (Throwable throwable1){
+
+                System.out.print(throwable1.toString());
+
+            }
+
         }
         return "ok";
     }
