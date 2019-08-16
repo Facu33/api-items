@@ -20,7 +20,7 @@ import java.util.*;
 
 public class UserService {
 
-    public String get(String strUrl,String username,String token) throws Exception {
+    public String get(String strUrl,String username,String token) throws IOException {
 
         StringBuilder stringBuilder = new StringBuilder(strUrl);
         stringBuilder.append("?username=");
@@ -30,70 +30,78 @@ public class UserService {
 
         URL url = new URL(stringBuilder.toString());
 
-        URLConnection con = url.openConnection();
-        con.setRequestProperty("Accept", "application/json");
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        if (con instanceof HttpURLConnection) {
-            HttpURLConnection connection = (HttpURLConnection) con;
-            System.out.println("\nSending request to URL : " + url);
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
-            String line;
-            StringBuffer response = new StringBuffer();
+        try {
 
-            while ((line = in.readLine()) != null) {
-                response.append(line);
+            URLConnection con = url.openConnection();
+            con.setRequestProperty("Accept", "application/json");
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            if (con instanceof HttpURLConnection) {
+                HttpURLConnection connection = (HttpURLConnection) con;
+                System.out.println("\nSending request to URL : " + url);
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                String line;
+                StringBuffer response = new StringBuffer();
+
+                while ((line = in.readLine()) != null) {
+                    response.append(line);
+                }
+                in.close();
+
+                return response.toString();
             }
-            in.close();
 
-            return response.toString();
-        } else {
-            System.out.println("URL invalida");
-            return null;
+            return "";
+
+        } catch (SocketException se){
+
+            System.out.println(se.toString());
+            throw se;
+
         }
     }
 
 
-    public static String postLogin(String urlGet, User user) {
+    public static String postLogin(String urlGet, User user) throws IOException {
         try {
             URL url = new URL(urlGet);
-            try {
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                con.setDoOutput(true);
-                con.setDoInput(true);
-                con.setRequestProperty("Content-Type", "application/json");
-                con.setRequestProperty("Accept", "application/json");
-                con.setRequestMethod("POST");
 
-                Gson gson = new Gson();
-                JsonElement jsonInputString = gson.toJsonTree(user);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setDoOutput(true);
+            con.setDoInput(true);
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept", "application/json");
+            con.setRequestMethod("POST");
 
-                OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-                wr.write(jsonInputString.toString());
-                wr.flush();
+            Gson gson = new Gson();
+            JsonElement jsonInputString = gson.toJsonTree(user);
 
-                StringBuilder sb = new StringBuilder();
-                int HttpResult = con.getResponseCode();
-                if (HttpResult == HttpURLConnection.HTTP_OK) {
-                    BufferedReader br = new BufferedReader(
-                            new InputStreamReader(con.getInputStream(), "utf-8"));
-                    String line = null;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line + "\n");
-                    }
-                    br.close();
-                    return sb.toString();
-                } else {
-                    System.out.println(con.getResponseMessage());
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            wr.write(jsonInputString.toString());
+            wr.flush();
+
+            StringBuilder sb = new StringBuilder();
+            int HttpResult = con.getResponseCode();
+            if (HttpResult == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(con.getInputStream(), "utf-8"));
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line + "\n");
                 }
-            } catch (IOException exception) {
-                System.out.println(exception.getMessage());
+                br.close();
+                return sb.toString();
+            } else {
+                System.out.println(con.getResponseMessage());
             }
 
-        } catch (MalformedURLException exception) {
-            System.out.println(exception.getMessage());
+        } catch (SocketException se){
+
+            System.out.println(se.toString());
+            throw se;
+
         }
-        return (null);
+        return ("");
     }
 
     public static Item postItems(Item item){
