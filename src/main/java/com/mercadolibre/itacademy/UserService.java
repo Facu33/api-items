@@ -109,9 +109,9 @@ public class UserService {
         RestHighLevelClient client = makeConnection();
 
         Map<String, String> dataMap = new HashMap<>();
-        dataMap.put("usename",item.getUser());
+        dataMap.put("username",item.getUsername());
         dataMap.put("site",item.getSite());
-        dataMap.put("categorie",item.getCategorie());
+        dataMap.put("category",item.getCategory());
         dataMap.put("name",item.getName());
 
         IndexRequest indexRequest = new IndexRequest("items").source(dataMap);

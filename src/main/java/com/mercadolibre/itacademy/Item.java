@@ -4,24 +4,24 @@ public class Item {
 
     private String username;
     private String site;
-    private String categorie;
+    private String category;
     private String name;
 
     public Item() {
     }
 
-    public Item(String user, String site, String categorie, String name) {
+    public Item(String username, String site, String category, String name) {
         this.username = username;
         this.site = site;
-        this.categorie = categorie;
+        this.category = category;
         this.name = name;
     }
 
-    public String getUser() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUser(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -33,12 +33,12 @@ public class Item {
         this.site = site;
     }
 
-    public String getCategorie() {
-        return categorie;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategorie(String categorie) {
-        this.categorie = categorie;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getName() {
