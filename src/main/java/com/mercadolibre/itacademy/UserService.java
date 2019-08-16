@@ -73,7 +73,6 @@ public class UserService {
     public static String postLogin(String urlGet, User user) throws IOException {
         try {
             URL url = new URL(urlGet);
-            System.out.println(urlGet);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setDoOutput(true);
             con.setDoInput(true);
