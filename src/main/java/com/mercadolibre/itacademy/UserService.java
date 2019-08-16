@@ -81,7 +81,7 @@ public class UserService {
         RestHighLevelClient client = makeConnection();
 
         Map<String, String> dataMap = new HashMap<>();
-        dataMap.put("user",item.getUser());
+        dataMap.put("usename",item.getUser());
         dataMap.put("site",item.getSite());
         dataMap.put("categorie",item.getCategorie());
         dataMap.put("name",item.getName());
@@ -141,13 +141,13 @@ public class UserService {
     }
 
 
-    public static Collection<Item> getItemsxUser(String user) {
+    public static Collection<Item> getItemsxUser(String username) {
 
         RestHighLevelClient client = makeConnection();
 
         SearchRequest searchRequest = new SearchRequest("items");
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.matchQuery("user",user));
+        searchSourceBuilder.query(QueryBuilders.matchQuery("username",username));
         searchRequest.source(searchSourceBuilder);
 
         try {

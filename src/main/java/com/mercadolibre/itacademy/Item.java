@@ -2,7 +2,7 @@ package com.mercadolibre.itacademy;
 
 public class Item {
 
-    private String user;
+    private String username;
     private String site;
     private String categorie;
     private String name;
@@ -11,18 +11,18 @@ public class Item {
     }
 
     public Item(String user, String site, String categorie, String name) {
-        this.user = user;
+        this.username = username;
         this.site = site;
         this.categorie = categorie;
         this.name = name;
     }
 
     public String getUser() {
-        return user;
+        return username;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUser(String username) {
+        this.username = username;
     }
 
     public String getSite() {
