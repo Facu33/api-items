@@ -12,17 +12,17 @@ public class App extends Jooby {
         use(new Jackson());
         UserController userController = new UserController();
 
-        post("/items/login", (req, res) -> userController.doLogin(req, res));
+        post("/items/login", (req, res) -> UserController.doLogin(req, res));
 
-        get("/items/sites", (req, res) -> userController.getSites(req, res));
+        get("/items/sites", (req, res) -> UserController.getSites(req, res));
 
-        get("/items/sites/:id/categories", (req, res) -> userController.getSitesCategories(req, res));
+        get("/items/sites/:id/categories", (req, res) -> UserController.getSitesCategories(req, res));
 
-        post("/items/item", (req, res) -> userController.postItem(req, res));
+        post("/items/item", (req, res) -> UserController.postItem(req, res));
 
-        get("/items/item", (req, res) -> userController.getItems(req, res));
+        get("/items/item", (req, res) -> UserController.getItems(req, res));
 
-        get("/items/item/:username", (req, res) -> userController.getItemsxUser(req, res));
+        get("/items/item/:username", (req, res) -> UserController.getItemsxUser(req, res));
 
     }
 

@@ -10,9 +10,9 @@ import java.util.Collection;
 
 public class UserController {
 
-    private final Gson gson = new Gson();
+    private final static Gson gson = new Gson();
 
-    public void doLogin(Request req, Response res) throws Exception {
+    public static void doLogin(Request req, Response res) throws Exception {
         try {
             User user = req.body(User.class);
             String response = UserService.postLogin("http://localhost:8084/users/login", user);
@@ -23,7 +23,7 @@ public class UserController {
         }
     }
 
-    public void getSites(Request req, Response res) {
+    public static void getSites(Request req, Response res) {
         try {
             String username = req.param("username").value();
             String token = req.param("token").value();
@@ -58,7 +58,7 @@ public class UserController {
         }
     }
 
-    public void getSitesCategories(Request req, Response res) {
+    public static void getSitesCategories(Request req, Response res) {
         try {
             UserService userService = new UserService();
             String username = req.param("username").value();
@@ -105,7 +105,7 @@ public class UserController {
         }
     }
 
-    public String postItem(Request req, Response res) {
+    public static String postItem(Request req, Response res) {
 
         try {
             Item item = req.body().to(Item.class);
@@ -153,7 +153,7 @@ public class UserController {
         return "ok";
     }
 
-    public String getItems(Request req, Response res) {
+    public static String getItems(Request req, Response res) {
 
         Collection<Item> items = UserService.getItems();
         try {
@@ -165,7 +165,7 @@ public class UserController {
         return "ok";
     }
 
-    public String getItemsxUser(Request req, Response res) {
+    public static String getItemsxUser(Request req, Response res) {
 
         Collection<Item> itemsxuser = UserService.getItemsxUser(req.param("username").value());
         try {
